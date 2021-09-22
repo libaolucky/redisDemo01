@@ -1,0 +1,78 @@
+Redis的笔记：
+1.String  k-v结构 单个key最大能存 512 约等于 多少个文字？
+ 增(修改)： set key value       例子： set adminName 'zhangsan'
+ 修改就是增加，会自动覆盖
+ 查： get key             例子： get adminName
+ 查询所有的键 key： keys *  例子： keys *
+ 删 key: del key         例子：  del  adminName
+
+ 一、String 的特有的命令：
+ （重要）过期时间： setex  存的时候就直接给定过期时间， 验证码就用它 setex code 60 255
+ （重要）自增（减） incr场景：抖音点赞，产品的热销排名。 自增的值一定要是数字
+ 自减： decr key
+
+ 定量增： incrby 场景：一次增加很多个 incrby mycode 50
+ 定量减： decrby 场景：一次减去很多个 decrby mycode 50
+
+ 批量增： mset key1 value key2 value
+ 批量查看： mget key1 key2
+ 字符串截取： getrange key start end
+ 先查再存： getset  格式： getset key value
+ 将给定的key值设置为 value,并返回key的旧值 ，工资
+ 先时间， 后 value
+ 字符串的长度： strlen key 的长度， 不存在的key的长度是0
+ 字符串的追加： append key value  追加的位置是 value的末尾
+
+
+ //其他的通用命令
+ 1.DUMP 给定key中的值进行  序列化，返回值是  序列化后的值  了解**
+ 2.exists  key值是否存在， 很常用！ 返回值是1  或者 0 1:代表存在，0代表不存在
+ 3.expire  给key做一个 过期时间，写的值是 过期的秒数
+ 例子： set  phoneCode 3343  , expire  phoneCode  60
+ 到期之后，key自动删除 ，这个非常常用！！！
+
+ 4.ttl 查询 还剩余多少时间 过期  秒为单位, 应该场景，1.订单 15分钟有效; 2.考试
+ 5. persist 移除key的过期时间，将key 保持为持久状态。 开票
+ 6. rename 更改key值，这个不常用 自已测试
+ 7. renamenx 当key  新的key不存在时，改名为新名字， 了解
+ 8.type key 返回key 的数据类型 ---5种
+ 9. randomkey 随机出可以key  抽奖常用的， 定名 。 今天的作业4： 做一个随机点名程序，被点到的人移除掉
+
+二、Hash 哈希类型，适合存储对象
+ 增：hset  例子：hset person name lisi    hset只能写一个
+ 删除：hdel   例子：hdel food color
+ 批量增：hmset
+ 例子：hmset person name lisi age 29 boyfriend xiaoha 是后面可以写多个，连着写
+  person 是key  value 是一堆 k-v组合
+ 批量查：hmget human name age
+
+ 查： hget food color
+查所有的key: hkeys food      例子：hkeys human
+查所有key 和value: hgetall human
+hash 字段的自增： hincrby human age 10
+hash 字段的自减： hdecrby human age 10
+
+hash 数据类型的遍历： Hscan 不怎么常用 扫描的意思
+
+三、 list --双端队列结构。 先进后出 ，排序是按照 插入的顺序排序的
+比如：   沙和尚 猪八戒   孙悟空  唐僧   林子   刘备  关羽  张飞  赵四
+左边增： lpush  key XXX
+右边增:  rpush  key XXX
+遍历：  lrange key 0 -1  从0到-1就是遍历全部
+ 左边删除： lpop key
+ 右边删除： rpop key
+ 插入： linsert key before  “刘备”  '林子'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
